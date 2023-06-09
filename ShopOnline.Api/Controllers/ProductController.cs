@@ -4,6 +4,7 @@ using ShopOnline.Models.Dtos;
 using ShopOnline.Api.Extentions;
 using ShopOnline.Api.Repositories.Interface;
 
+
 namespace ShopOnline.Api.Controllers
 {
     [Route("api/[controller]")]
@@ -42,5 +43,34 @@ namespace ShopOnline.Api.Controllers
                                 "Error retrieving data from the database");
             }
         }
+
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<ProductDto>> GetItem(int id)
+        {
+            try
+            {
+                var product = await this.productRepository.GetItem(id);
+
+                if (product == null)
+                {
+                    return BadRequest();
+                }
+                else
+                {      
+                    var productCategory = await this.productRepository.GetCategory(product.CategoryId);
+
+                    var productDto = product.ConverToDto(productCategory);
+
+                    return Ok(productDto);
+                }
+            }
+            catch (Exception)
+            {
+
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                                "Error retrieving data from the database");
+            }
+        }
+
     }
 }

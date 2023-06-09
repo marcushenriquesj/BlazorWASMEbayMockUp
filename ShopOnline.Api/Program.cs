@@ -3,6 +3,7 @@ using ShopOnline.Api.Data;
 using ShopOnline.Api.Repositories.Interface;
 using ShopOnline.Api.Repositories;
 using Microsoft.Net.Http.Headers;
+using ShopOnline.Api.Repositories.Implementation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +19,7 @@ builder.Services.AddDbContextPool<ShopOnlineDbContext>(options =>
 );
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
-
+builder.Services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
 
 var app = builder.Build();
 
