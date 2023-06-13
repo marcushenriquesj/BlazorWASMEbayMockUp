@@ -5,6 +5,7 @@ namespace ShopOnline.Api.Extentions
 {
     public static class DtoConversions
     {
+        //Converts Ienum of products and product categories to combo obj
         public static IEnumerable<ProductDto> ConverToDto(this IEnumerable<Product> products,
                                                            IEnumerable<ProductCategory> productCategories)
         {
@@ -24,6 +25,7 @@ namespace ShopOnline.Api.Extentions
                     }).ToList();
         }
 
+        //Converts single product and product category to combo obj
         public static ProductDto ConverToDto(this Product product,
                                             ProductCategory productCategory)
         {
@@ -41,6 +43,7 @@ namespace ShopOnline.Api.Extentions
             };
         }
 
+        //Converts Ienum of products and and cart items (place holder that relations user's cart and product/Qty) to combo obj
         public static IEnumerable<CartItemDto> ConvertToDto(this IEnumerable<CartItem> cartItems,
                                                             IEnumerable<Product> products)
         {
@@ -61,6 +64,7 @@ namespace ShopOnline.Api.Extentions
                     }).ToList();
         }
 
+        //Converts single product and and cart item (place holder that relations user's cart and product/Qty) to combo obj
         public static CartItemDto ConvertToDto(this CartItem cartItem,
                                                Product product)
         {
@@ -77,6 +81,18 @@ namespace ShopOnline.Api.Extentions
                         TotalPrice = product.Price * cartItem.Qty
                     };
         }
+
+        public static IEnumerable<ProductCategoryDto> ConvertToDto(this IEnumerable<ProductCategory> productCategories)
+        {
+            return (from productCategory in productCategories
+                    select new ProductCategoryDto
+                    {
+                        Id= productCategory.Id,
+                        Name= productCategory.Name,
+                        IconCss = productCategory.IconCss
+                    }).ToList();
+        }
+
 
 
     }

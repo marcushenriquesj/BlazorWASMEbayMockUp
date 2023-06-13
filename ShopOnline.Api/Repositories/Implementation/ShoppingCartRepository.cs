@@ -15,12 +15,15 @@ namespace ShopOnline.Api.Repositories.Implementation
             _shopOnlineDbContext = shopOnlineDbContext;
         }
 
+        //Checks if cartItem already exists in the runtime env
         private async Task<bool> CartItemExists(int cartId, int productId)
         {
             return await this._shopOnlineDbContext.CartItems.AnyAsync(c => c.CartId == cartId &&
                                                                      c.ProductId == productId);
 
         }
+
+        //Add item to user's cart logic
         public async Task<CartItem> AddItem(CartItemToAddDto cartItemToAddDto)
         {
             if (await CartItemExists(cartItemToAddDto.CartId, cartItemToAddDto.ProductId) == false)
@@ -46,6 +49,7 @@ namespace ShopOnline.Api.Repositories.Implementation
             return null;
         }
 
+        //Delete item from user's cart logic
         public async Task<CartItem> DeleteItem(int id)
         {
             var item = await this._shopOnlineDbContext.CartItems.FindAsync(id);
@@ -57,6 +61,7 @@ namespace ShopOnline.Api.Repositories.Implementation
             return item;
         }
 
+        //Get item from user's cart logic
         public async Task<CartItem> GetItem(int id)
         {
             return await (from cart in _shopOnlineDbContext.Carts
@@ -72,6 +77,7 @@ namespace ShopOnline.Api.Repositories.Implementation
                           }).SingleOrDefaultAsync();
         }
 
+        //get all items from user's cart logic
         public async Task<IEnumerable<CartItem>> GetItems(int userId)
         {
             return await (from cart in _shopOnlineDbContext.Carts
@@ -87,6 +93,7 @@ namespace ShopOnline.Api.Repositories.Implementation
                           }).ToListAsync();
         }
 
+        //update quantity of specific item in user's cart
         public async Task<CartItem> UpdateQty(int id, CartItemQtyUpdateDto cartItemQtyUpdateDto)
         {
             var item = await _shopOnlineDbContext.CartItems.FindAsync(id);

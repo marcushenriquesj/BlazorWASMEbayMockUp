@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace ShopOnline.Models.Dtos
 {
+    //specific cart and product combo
     public class CartItemDto
     {
         public int Id { get; set; }

@@ -11,11 +11,14 @@ namespace ShopOnline.Web.Services
     public class ShoppingCartService : IShoppingCartService
     {
         private readonly HttpClient _httpClient;
+        public event Action<int> OnShoppingCartChanged;
 
         public ShoppingCartService(HttpClient httpClient)
         {
             _httpClient = httpClient;
-        }
+        }        
+
+        //Http Post: adds product to user's cart
         public async Task<CartItemDto> AddItem(CartItemToAddDto cartItemToAddDto)
         {
             try
@@ -41,7 +44,8 @@ namespace ShopOnline.Web.Services
                 throw;
             }
         }
-
+        
+        //Http Delete: deletes item from user's shopping cart based on cartItemDto Id
         public async Task<CartItemDto> DeleteItem(int id)
         {
             try
@@ -61,6 +65,7 @@ namespace ShopOnline.Web.Services
             }
         }
 
+        //Http Get receives all items within a user's shopping cart in the form of CartItemDto
         public async Task<List<CartItemDto>> GetItems(int userId)
         {
             try
@@ -87,6 +92,18 @@ namespace ShopOnline.Web.Services
             }
         }
 
+        //Event handler for CartMenu Component: when item Qty is changed event is raised
+        public void RaiseEventOnShoppingCartChanged(int totalQty)
+        {
+            //Check if event has subs
+            if(OnShoppingCartChanged != null)
+            {
+                //Raise to subs
+                OnShoppingCartChanged.Invoke(totalQty);
+            }
+        }
+
+        //Create json request for Http Patch async controller call to update quanity of items in a user's shopping cart
         public async Task<CartItemDto> UpdateQty(CartItemQtyUpdateDto cartItemQtyUpdateDto)
         {
             try
