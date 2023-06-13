@@ -6,12 +6,9 @@ namespace ShopOnline.Api.Extentions
     public static class DtoConversions
     {
         //Converts Ienum of products and product categories to combo obj
-        public static IEnumerable<ProductDto> ConverToDto(this IEnumerable<Product> products,
-                                                           IEnumerable<ProductCategory> productCategories)
+        public static IEnumerable<ProductDto> ConverToDto(this IEnumerable<Product> products)
         {
             return (from Product in products
-                    join ProductCategory in productCategories
-                    on Product.CategoryId equals ProductCategory.Id
                     select new ProductDto
                     {
                         Id = Product.Id,
@@ -20,14 +17,13 @@ namespace ShopOnline.Api.Extentions
                         ImageUrl = Product.ImageURL,
                         Price = Product.Price,
                         Qty = Product.Qty,
-                        CategoryId = Product.CategoryId,
-                        CategoryName = ProductCategory.Name
+                        CategoryId = Product.ProductCategory.Id,
+                        CategoryName = Product.ProductCategory.Name
                     }).ToList();
         }
 
         //Converts single product and product category to combo obj
-        public static ProductDto ConverToDto(this Product product,
-                                            ProductCategory productCategory)
+        public static ProductDto ConverToDto(this Product product)
         {
             return new ProductDto
             {
@@ -38,7 +34,7 @@ namespace ShopOnline.Api.Extentions
                 Price = product.Price,
                 Qty = product.Qty,
                 CategoryId = product.CategoryId,
-                CategoryName = productCategory.Name
+                CategoryName = product.ProductCategory.Name
 
             };
         }
