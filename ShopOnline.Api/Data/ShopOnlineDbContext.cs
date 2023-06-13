@@ -3,6 +3,7 @@ using ShopOnline.Api.Entities;
 
 namespace ShopOnline.Api.Data
 {
+    //Initialize Entity framework to compile data structure and records usable relational db for runtime
     public class ShopOnlineDbContext : DbContext
     {
         public ShopOnlineDbContext(DbContextOptions<ShopOnlineDbContext> options) : base(options)
@@ -292,22 +293,27 @@ namespace ShopOnline.Api.Data
             modelBuilder.Entity<ProductCategory>().HasData(new ProductCategory
             {
                 Id = 1,
-                Name = "Beauty"
+                Name = "Beauty",
+                IconCss = "oi oi-moon"
             });
             modelBuilder.Entity<ProductCategory>().HasData(new ProductCategory
             {
                 Id = 2,
-                Name = "Furniture"
+                Name = "Furniture",
+                IconCss = "oi oi-briefcase"
+
             });
             modelBuilder.Entity<ProductCategory>().HasData(new ProductCategory
             {
                 Id = 3,
-                Name = "Electronics"
+                Name = "Electronics",
+                IconCss = "oi oi-headphones"
             });
             modelBuilder.Entity<ProductCategory>().HasData(new ProductCategory
             {
                 Id = 4,
-                Name = "Shoes"
+                Name = "Shoes",
+                IconCss = "oi oi-star"
             });
         }
 

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using ShopOnline.Models.Dtos;
 using ShopOnline.Api.Extentions;
 using ShopOnline.Api.Repositories.Interface;
+using ShopOnline.Api.Entities;
 
 
 namespace ShopOnline.Api.Controllers
@@ -69,6 +70,54 @@ namespace ShopOnline.Api.Controllers
 
                 return StatusCode(StatusCodes.Status500InternalServerError,
                                 "Error retrieving data from the database");
+            }
+        }
+
+        [HttpGet]
+        [Route(nameof(GetProductCategories))]
+        public async Task<ActionResult<ProductCategoryDto>> GetProductCategories()
+        {
+            try
+            {
+                var productCategories = await this.productRepository.GetCategories();
+
+                if (productCategories == null)
+                    return BadRequest();
+                var productCategoryDtos = productCategories.ConvertToDto();
+                if (productCategoryDtos == null)
+                    return BadRequest();
+                return Ok(productCategoryDtos);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                                               "Error retrieving data from the database");
+            }
+        }
+
+        [HttpGet]
+        [Route("{categoryId}/GetProductsByCategory")]
+        public async Task<ActionResult<IEnumerable<ProductDto>>> GetProductsByCategory(int categoryId)
+        {
+            try
+            {
+                var products = await this.productRepository.GetItemsByCategory(categoryId);
+                if(products == null)
+                    return BadRequest();
+
+                var productCategories = await this.productRepository.GetCategories();
+
+                if (productCategories == null)
+                    return BadRequest();
+
+                var productDtos = products.ConverToDto(productCategories);
+
+                return Ok(productDtos);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                                                "Error retrieving data from the database");
             }
         }
 

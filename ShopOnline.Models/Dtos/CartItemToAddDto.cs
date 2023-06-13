@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace ShopOnline.Models.Dtos
 {
+    //specific cart product and qty to send via post http combo
     public class CartItemToAddDto
     {
         public int CartId { get; set; }

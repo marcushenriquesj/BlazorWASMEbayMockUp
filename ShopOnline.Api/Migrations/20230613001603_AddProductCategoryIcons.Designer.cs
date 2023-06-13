@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShopOnline.Api.Data;
 
@@ -10,9 +11,11 @@ using ShopOnline.Api.Data;
 namespace ShopOnline.Api.Migrations
 {
     [DbContext(typeof(ShopOnlineDbContext))]
-    partial class ShopOnlineDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230613001603_AddProductCategoryIcons")]
+    partial class AddProductCategoryIcons
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -361,25 +364,25 @@ namespace ShopOnline.Api.Migrations
                         new
                         {
                             Id = 1,
-                            IconCss = "oi oi-moon",
+                            IconCss = "fa fa-spa",
                             Name = "Beauty"
                         },
                         new
                         {
                             Id = 2,
-                            IconCss = "oi oi-briefcase",
+                            IconCss = "fa fa-couch",
                             Name = "Furniture"
                         },
                         new
                         {
                             Id = 3,
-                            IconCss = "oi oi-headphones",
+                            IconCss = "fa fa-headphones",
                             Name = "Electronics"
                         },
                         new
                         {
                             Id = 4,
-                            IconCss = "oi oi-star",
+                            IconCss = "fa fa-shoe-prints",
                             Name = "Shoes"
                         });
                 });

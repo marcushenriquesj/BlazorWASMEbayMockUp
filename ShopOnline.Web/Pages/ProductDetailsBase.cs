@@ -17,6 +17,7 @@ namespace ShopOnline.Web.Pages
         public ProductDto Product { get; set; }
         public string ErrorMessage { get; set; }
 
+        //On click event protocal after click on specific product. it returns all the product info of specific product
         protected override async Task OnInitializedAsync()
         {
             try
@@ -30,6 +31,7 @@ namespace ShopOnline.Web.Pages
             }
         }
 
+        //On click event of specific product to add to Cart that is attached to specific User
         protected async Task AddToCart_click(CartItemToAddDto cartItemToAddDto)
         {
             try

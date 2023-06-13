@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace ShopOnline.Models.Dtos
 {
+
+    //product and category combo
     public class ProductDto
     {
         public int Id { get; set; }

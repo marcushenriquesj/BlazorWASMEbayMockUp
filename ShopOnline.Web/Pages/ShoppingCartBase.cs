@@ -17,12 +17,13 @@ namespace ShopOnline.Web.Pages
         protected int TotalQty { get; set; }
 
 
+        //populate data on initialized
         protected override async Task OnInitializedAsync()
         {
             try
             {
                 ShoppingCartItems = await ShoppingCartService.GetItems(HardCodedUser.UserId);
-                CalcCartSummaryTotals();
+                CartChanged();
             }
             catch (Exception ex)
             {
@@ -30,6 +31,7 @@ namespace ShopOnline.Web.Pages
             }
         }
 
+        //Delete from cart button logic
         protected async Task DeleteFromCart_Click(int id)
         {
             try
@@ -38,7 +40,7 @@ namespace ShopOnline.Web.Pages
 
                 RemoveCartItem(id);
 
-                CalcCartSummaryTotals();
+                CartChanged();
 
             }
             catch (Exception)
@@ -48,6 +50,7 @@ namespace ShopOnline.Web.Pages
             }
         }
 
+        //update quanity of product in a cart logic
         protected async Task UpdateQtyCartItem_Click(int id, int qty)
         {
             try
@@ -61,7 +64,7 @@ namespace ShopOnline.Web.Pages
                     };
                     var returnedUpdateItemDto = await this.ShoppingCartService.UpdateQty(updateItemDto);
                     UpdateItemTotalPrice(returnedUpdateItemDto);
-                    CalcCartSummaryTotals();
+                    CartChanged();
                     await MakeUpdateQtyButtonVisible(id, false);
                 }
                 else
@@ -82,6 +85,7 @@ namespace ShopOnline.Web.Pages
             }
         }
 
+        #region make update quantity button visible based on OnInput event
         protected async Task UpdateQty_Input(int id)
         {
             await MakeUpdateQtyButtonVisible(id, true);
@@ -91,7 +95,9 @@ namespace ShopOnline.Web.Pages
         {
             await Js.InvokeVoidAsync("MakeUpdateQtyButtonVisible", id, visible);
         }
+        #endregion
 
+        #region set total price and quantity of products within a specific user shopping cart
 
         private void SetTotalPrice()
         {
@@ -101,6 +107,7 @@ namespace ShopOnline.Web.Pages
         {
             TotalQty = ShoppingCartItems.Sum(p => p.Qty);
         }
+       
 
         private void CalcCartSummaryTotals()
         {
@@ -108,6 +115,7 @@ namespace ShopOnline.Web.Pages
             SetTotalQty();
 
         }
+              
 
         private void UpdateItemTotalPrice(CartItemDto cartItemDto)
         {
@@ -117,17 +125,27 @@ namespace ShopOnline.Web.Pages
                 item.TotalPrice = cartItemDto.Price * cartItemDto.Qty;
             }
         }
+        #endregion
 
+        //gets specific cartItemDTO (product/category/user)
         private CartItemDto GetCartItem(int id)
         {
             return ShoppingCartItems.FirstOrDefault(i => i.Id == id);
         }
 
+        //instead of calling controller twice to refresh UI with deleted object. instead we make shoppingcartitems a List of type CartItemDto so that we can remove it from the base class that implements changes directly to razor comp
         private void RemoveCartItem(int id)
         {
             var cartItemDto = GetCartItem(id);
 
             ShoppingCartItems.Remove(cartItemDto);
+        }
+
+        //This is a event subscriber to OnShoppingCartChanged. this is subscriber's feature
+        private void CartChanged()
+        {
+            CalcCartSummaryTotals();
+            ShoppingCartService.RaiseEventOnShoppingCartChanged(TotalQty);
         }
 
     }
