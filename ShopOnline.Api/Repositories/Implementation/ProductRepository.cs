@@ -30,31 +30,26 @@ namespace ShopOnline.Api.Repositories
         //Repo data set returns specific product item
         public async Task<Product> GetItem(int id)
         {
-            var product = await shopOnlineDbContext.Products.FindAsync(id);
+            var product = await shopOnlineDbContext.Products
+                                .Include(p => p.ProductCategory)
+                                .SingleOrDefaultAsync(p => p.Id == id);
             return product;
         }
 
         //Repo data set returns all product items
         public async Task<IEnumerable<Product>> GetItems()
         {
-            var products = await this.shopOnlineDbContext.Products.ToListAsync();
+            var products = await this.shopOnlineDbContext.Products
+                                    .Include(p => p.ProductCategory).ToArrayAsync();
+                                        
             return (IEnumerable<Product>)products;
         }
 
         public async Task<IEnumerable<Product>> GetItemsByCategory(int id)
         {
-            var products = (from product in shopOnlineDbContext.Products
-                            where product.CategoryId == id
-                            select new Product
-                            {
-                                Id = product.Id,
-                                Name = product.Name,
-                                Description = product.Description,
-                                ImageURL = product.ImageURL,
-                                Qty = product.Qty,
-                                Price = product.Price,
-                                CategoryId = product.CategoryId
-                            }).ToList();
+            var products = await this.shopOnlineDbContext.Products
+                                   .Include(p => p.ProductCategory)
+                                   .Where(p => p.CategoryId == id).ToListAsync();
             return products;
         }
     }
